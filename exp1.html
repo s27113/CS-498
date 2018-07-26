@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<script src="http://d3js.org/d3.v4.min.js"></script>
+
+<style>
+.chart rect { fill: rebeccapurple; }
+.chart rect:hover { fill: darkorange;}
+#tooltip {
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    width: 65px; 
+    height: 50px;
+    padding: 12px;
+    font: 12px sans-serif;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+}
+</style>
+
+<html>
+
+<head>
+<script>
+    function revealEssay() {
+    document.getElementById("essay").innerHTML = "Insert Essay here.";
+}
+</script>
+</head>
+
+<body>
+<font face="helvetica">
+<h1>
+    CS 498: Final Project
+</h1>
+<h2>
+    UFO Sightings in MN, USA From 2000-2018
+</h2>
+<p>
+    <font size="2">
+<b>The number of UFO Sightings by Year in MN, USA From 2000-2018: </b><br>
+
+<svg class="chart"></svg>
+
+<div id="tooltip"></div>
+
+<script>
+
+var margin = 50; 
+var width = 800;
+var height = 151;
+
+var data = [42,53,28,44,75,76,58,52,54,63,59,83,142,125,103,151,85,83,18];
+//document.getElementById("data").innerHTML = data;
+////<span id="data"></span></p>
+var x = d3.scaleLinear().domain([0,19]).range([0,width]);
+var y = d3.scaleLinear().domain([0,151]).range([height,-5]);
+
+var tooltip = d3.select("#tooltip");
+
+var chart = d3.select(".chart")
+
+chart.attr("width",width + 2*margin)
+    .attr("height",height + 2*margin)
+    .append("g")
+        .attr("transform", "translate(" + margin + "," + margin + ")")
+    .selectAll("rect")
+    .data(data)
+    .enter().append("rect")
+    .attr("width",19)
+    .attr("height",0) //height of bar prior to transition
+    .attr("x",function(d,i) { return x(i); })
+    //.attr("x", function(d) {return d; })
+    .attr("y",151) //y settings prior to transition
+    //set tooltip before transition
+        .on("mouseover", function(d,i) {
+        tooltip.style("opacity", 1)
+               .style("left",(d3.event.pageX)+"px")
+               .style("top",(d3.event.pageY)+"px")
+               .html(d+" UFO Sightings in MN in '"+ i);
+    })
+    .on("mouseout", function() { tooltip.style("opacity", 0) })
+    .transition().duration(1000).delay(300)
+    .attr("height",function(d) { return d; })
+    //.attr("width",function(d) { return 18 - d; })
+    .attr("y",function(d) { return 151 - d; })
+    //.attr("x",function(d) { return 200 - d; })
+
+//y axis
+chart.append("g")
+    .attr("transform", "translate(" + margin + "," + margin + ")")
+    .call(d3.axisLeft(y));
+
+// axis label for the y axis
+chart.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height-20))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("# of UFO Sightings");    
+
+//x axis
+chart.append("g")
+    .attr("transform", "translate(" + margin + "," + (height+margin) + ")")
+    .call(d3.axisBottom(x));
+
+// axis label for the x axis
+chart.append("text")             
+      .attr("transform", "translate(" + (width/2) + "," + (height+margin+(margin/1.2)) + ")")
+      .style("text-anchor", "middle")
+      .text("Date");
+
+ 
+
+////http://jonathansoma.com/tutorials/d3/clicking-and-hovering/
+
+
+</script>
+
+
+
+<p id="essay"> </p>
+
+<button type="button" onclick="revealEssay()">Click for Essay</button>
+
+
+<p> Darth Tater </p>
+</font></font>
+</body></html>
+
+
